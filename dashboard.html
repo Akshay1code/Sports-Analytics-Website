@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports Analytics Website</title>
+
+  <!-- Bootstrap 5.3.8 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for social icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* ===== GLOBAL ===== */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7fbff;
+      color: #023e8a;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; }
+
+    /* ===== NAVBAR ===== */
+    .navbar-custom {
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 15px 30px;
+    }
+
+    .navbar-custom .navbar-brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white !important;
+    }
+
+    .navbar-custom .nav-link {
+      font-size: 1.1rem;
+      color: white !important;
+      margin-right: 20px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .navbar-custom .nav-link:hover { color: #48c774 !important; }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      text-align: center;
+      padding: 120px 20px;
+      background: linear-gradient(135deg, #0077b6, #00b4d8);
+      color: white;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+      margin-bottom: 35px;
+      opacity: 0.9;
+    }
+
+    .hero .cta-button {
+      background-color: #48c774;
+      color: white;
+      padding: 15px 35px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .hero .cta-button:hover {
+      background-color: #36a261;
+      transform: translateY(-3px);
+    }
+
+    /* ===== SPORTS CARDS ===== */
+    .card-custom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  font-size: 1.1rem;
+  border-radius: 20px;
+  border: none;
+  margin-top: 30px;
+  text-decoration: none;
+  text-align: center;
+  padding: 40px 20px;
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  background: linear-gradient(135deg, #023e8a, #0077b6);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.card-custom:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+}
+
+.card-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+}
+
+/* Optional: fade-in animation */
+#tabs .col-6 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+#tabs .col-6:nth-child(1) { animation-delay: 0.1s; }
+#tabs .col-6:nth-child(2) { animation-delay: 0.2s; }
+#tabs .col-6:nth-child(3) { animation-delay: 0.3s; }
+#tabs .col-6:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+    /* ===== NEWS SECTION ===== */
+    .newstab {
+      border-radius: 15px;
+      background: linear-gradient(135deg, #48c774, #90e0ef);
+      padding: 40px;
+      margin: 20px 0;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      color: #fff;
+    }
+
+    #h1 {
+      font-weight: 700;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .carousel-inner img {
+      border-radius: 12px;
+      max-height: 400px;
+      object-fit: cover;
+    }
+
+    .carousel-caption {
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: #023e8a;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 30px 20px;
+      color: white;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .footer a { color: white; margin: 0 10px; transition: color 0.3s; }
+    .footer a:hover { color: #48c774; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .hero p { font-size: 1.1rem; }
+      .card-custom { padding: 30px 15px; font-size: 1rem; }
+      .newstab { padding: 30px 20px; }
+      #h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Sports Analytics</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="#hero">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#features">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
+          <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="hero" id="hero">
+    <h1>Namaskaram:Kama Ghani</h1>
+    <p>Empowering teams and players with real-time sports analytics.</p>
+  </section>
+
+  <!-- SPORTS CARDS -->
+  <div class="container text-center mt-5">
+  <div class="row justify-content-center g-4" id="tabs">
+    
+    <!-- Cricket Card -->
+    <div class="col-6 col-md-3">
+      <a class="card-custom" href="cricket.html">
+        <div class="card-icon">🏏</div>
+        <h3 class="card-title">Cricket</h3>
+      </a>
+    </div>
+    
+    <!-- Football Card -->
+    <div class="col-6 col-md-3">
+      <a class="card-custom" href="football.html">
+        <div class="card-icon">⚽</div>
+        <h3 class="card-title">Football</h3>
+      </a>
+    </div>
+    
+    <!-- Chess Card -->
+    <div class="col-6 col-md-3">
+      <a class="card-custom" href="chess.html">
+        <div class="card-icon">♟️</div>
+        <h3 class="card-title">Chess</h3>
+      </a>
+    </div>
+    
+    <!-- Hockey Card -->
+    <div class="col-6 col-md-3">
+      <a class="card-custom" href="hockey.html">
+        <div class="card-icon">🏑</div>
+        <h3 class="card-title">Hockey</h3>
+      </a>
+    </div>
+
+  </div>
+</div>
+  <!-- NEWS SECTION -->
+  <div class="container d-flex justify-content-center my-5" id="news">
+    <div class="newstab text-center w-100" style="max-width: 900px;">
+      <p id="h1">Latest Sports News</p>
+      <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner rounded">
+          <div class="carousel-item active">
+            <img src="new1.jpg" class="d-block w-100" alt="News 1">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Cricket World Cup 2025 Highlights</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="news2.jpg" class="d-block w-100" alt="News 2">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Football Transfer Updates</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="news3.jpg" class="d-block w-100" alt="News 3">
+            <div class="carousel-caption d-none d-md-block">
+              <p>Chess Championship Finals</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Follow us for the latest updates:</p>
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+  </footer>
+
+</body>
+</html>
