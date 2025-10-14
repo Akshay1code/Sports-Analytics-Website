@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportsAnalytics - Global Chess Analytics</title>
+    <link rel="stylesheet" href="chessstyle.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SportsAnalytics</div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Rankings</a></li>
+                <li><a href="#">Matches</a></li>
+                <li><a href="#">News</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <div class="search-bar">
+                <input type="text" placeholder="Search Player or Tournament...">
+            </div>
+            <div class="toggle-switch">
+                <span>Men's</span>
+                <label class="switch">
+                    <input type="checkbox" id="data-toggle">
+                    <span class="slider round"></span>
+                </label>
+                <span>Women's</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="left-section">
+            <h2>Live Matches & Results</h2>
+            <div class="matches-container">
+                <!-- Match cards will be inserted here by JavaScript -->
+            </div>
+        </section>
+        <section id="right-section">
+            <h2>World Chess Rankings</h2>
+            <div class="rankings-container">
+                <!-- Rankings will be inserted here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer id="news-section">
+        <h2>Latest Chess News</h2>
+        <div class="news-ticker">
+            <div class="news-content">
+                 <!-- News items will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </footer>
+
+    <script src="chessscript.js"></script>
+</body>
+</html>
