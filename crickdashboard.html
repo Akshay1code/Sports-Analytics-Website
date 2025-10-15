@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS from the reference theme goes here (see next section) */
+        /* You should save this CSS to your cricketstyle.css file */
+
+        /* ===== GLOBAL STYLES (From Reference) ===== */
+        :root {
+            --primary-blue: #0077b6;
+            --secondary-blue: #00b4d8;
+            --dark-blue: #023e8a;
+            --accent-green: #48c774;
+            --light-bg: #f7fbff;
+            --card-bg: white;
+            --font: 'Poppins', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--light-bg);
+            color: var(--dark-blue);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 80px; /* Space for sticky header */
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== HEADER / NAVBAR (Themed) ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar img {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .navbar b {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        #menu-button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #menu-button:hover {
+            background: var(--secondary-blue);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+            top: 100%; /* Position below the button */
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-content a {
+            color: var(--dark-blue);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+            color: var(--secondary-blue);
+        }
+
+        .show {
+            display: block;
+        }
+
+        /* ===== MAIN CONTENT LAYOUT ===== */
+        main {
+            padding: 20px 40px;
+        }
+
+        .holder {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+        }
+        .holder::-webkit-scrollbar {
+            display: none;
+        }
+        .card {
+            flex: 0 0 300px; 
+            /* Do not grow, do not shrink, basis of 300px */
+        }
+
+        .content-area {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+            flex-direction: row;
+            flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+        }
+
+        .options {
+            flex: 2; /* Takes up more space */
+            min-width: 300px;
+        }
+
+        .news-section {
+            flex: 1; /* Takes up less space, sits nicely on the side */
+            min-width: 300px;
+        }
+
+        /* ===== MATCH CARD (.card) STYLES (Themed) ===== */
+        .card {
+    background: radial-gradient(ellipse at top left, #f5fafc, #e9f6ff, #eaf9fe);
+    border-radius: 15px;
+    border: none;
+    padding: 25px;
+    width: 300px;
+    height: auto;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto 1fr;
+    gap: 5px;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+        .icon {
+            width: 30px;
+            height: 20px;
+            object-fit: contain;
+            grid-column: 1 / 2;
+            align-self: center;
+        }
+        
+        .tournament-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            grid-column: 2 / 3;
+            text-align: right;
+        }
+
+        .format-info {
+            font-size: 0.9rem;
+            color: #555;
+            grid-column: 1 / 3;
+            margin-bottom: 10px;
+        }
+
+        .match-stage {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--secondary-blue);
+            grid-column: 1 / 3;
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            align-self: center;
+        }
+
+        .score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            text-align: right;
+            align-self: center;
+        }
+
+        .result {
+            grid-column: 1 / 3;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent-green);
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Adjusting layout for team/score lines (India vs Pakistan example) */
+        .team-one, .score-one { grid-row: 5; }
+        .team-two, .score-two { grid-row: 6; }
+        .result { grid-row: 7; } /* Adjusting row for result */
+        .team-one, .team-two { grid-column: 1; }
+        .score-one, .score-two { grid-column: 2; }
+
+
+        /* ===== RANKINGS STYLES (Themed) ===== */
+        .options .button {
+            display: flex;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .options .button button {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--primary-blue);
+            background: white;
+            color: var(--primary-blue);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .options .button button:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+        .options .button button:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .options .button .active {
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 119, 182, 0.4);
+        }
+
+        /* === Rank Cards Row Layout === */
+.options {
+    display: flex;
+    flex-wrap: wrap; /* allows wrapping on smaller screens */
+    gap: 20px;
+    justify-content: center; /* centers them horizontally */
+}
+
+.rankcard {
+    flex: 1 1 300px; /* flexible width (min 300px) */
+    max-width: 400px;
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.rankcard:hover {
+    transform: translateY(-5px);
+}
+
+
+        .rank-heading {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-blue);
+            padding-bottom: 5px;
+            display: block; /* Make <b> act like a block element */
+        }
+
+        .rank-item-container {
+            display: grid;
+            grid-template-columns: 30px 1fr;
+            gap: 10px 15px;
+            align-items: center;
+        }
+
+        .rank-number {
+            font-weight: 700;
+            color: var(--secondary-blue);
+        }
+
+        .rank-team {
+            font-weight: 500;
+        }
+
+        /* Men/Women Card Logic (Simplified for CSS) */
+        .rankcard-back {
+            display: none; /* Hidden by default, toggled by JS */
+        }
+
+        /* ===== NEWS SECTION STYLES (Themed) ===== */
+        #news-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-blue);
+            padding-left: 10px;
+        }
+        .news-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s;
+        }
+        .news-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .news-title {
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 5px;
+        }
+        .news-summary {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .news-link {
+            color: var(--secondary-blue);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+        
+        /* FOOTER (Themed) */
+        footer {
+            background: var(--dark-blue);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            margin-top: 30px;
+        }
+
+        /* ===== RESPONSIVE (Adapted from Reference) ===== */
+        @media (max-width: 900px) {
+            .content-area {
+                flex-direction: column;
+            }
+            .holder {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+            .navbar {
+                padding: 15px 20px;
+            }
+            main {
+                padding: 10px 20px;
+            }
+            .options, .news-section {
+                min-width: unset;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar b {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <b class="logo-group">
+            <img src="https://w0.peakpx.com/wallpaper/285/834/HD-wallpaper-icc-logo-cwc-logo.jpg" alt="ICC Logo">
+            Cricket Analytics
+        </b>
+        <div class="nav-menu">
+            <button id="menu-button">☰</button>
+            <div class="dropdown-content" id="analytics-dropdown">
+                <a href="#">Players Comparison & Stats</a>
+                <a href="#">Rankings</a>
+                <a href="#">Tournaments</a>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="holder">
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="India Flag" class="icon">
+                <h3 class="tournament-name">Asia Cup</h3>
+                <p class="format-info">T20 14 of 20</p>
+                <p class="match-stage">Toss</p>
+
+                <p class="team-name team-one">India</p>
+                <p class="score score-one">0/0</p>
+
+                <p class="team-name team-two">Pakistan</p>
+                <p class="score score-two">Yet to Bat</p>
+                
+                <p class="result">India won the toss chose to Bat</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="India Flag" class="icon">
+                <h3 class="tournament-name">Asia Cup</h3>
+                <p class="format-info">T20 13 of 20</p>
+                <p class="match-stage">Final</p>
+                
+                <p class="team-name team-one">India</p>
+                <p class="score score-one">210/5</p>
+
+                <p class="team-name team-two">Sri Lanka</p>
+                <p class="score score-two">198/8</p>
+                
+                <p class="result">India won by 12 runs</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="Flag" class="icon">
+                <h3 class="tournament-name">World Cup</h3>
+                <p class="format-info">ODI 9 of 48</p>
+                <p class="match-stage">Group A</p>
+                <p class="team-name team-one">Australia</p>
+                <p class="score score-one">260/7</p>
+                <p class="team-name team-two">England</p>
+                <p class="score score-two">261/4</p>
+                <p class="result">England won by 6 wickets</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="Flag" class="icon">
+                <h3 class="tournament-name">World Cup</h3>
+                <p class="format-info">ODI 9 of 48</p>
+                <p class="match-stage">Group A</p>
+                <p class="team-name team-one">Australia</p>
+                <p class="score score-one">260/7</p>
+                <p class="team-name team-two">England</p>
+                <p class="score score-two">261/4</p>
+                <p class="result">England won by 6 wickets</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="Flag" class="icon">
+                <h3 class="tournament-name">World Cup</h3>
+                <p class="format-info">ODI 9 of 48</p>
+                <p class="match-stage">Group A</p>
+                <p class="team-name team-one">Australia</p>
+                <p class="score score-one">260/7</p>
+                <p class="team-name team-two">England</p>
+                <p class="score score-two">261/4</p>
+                <p class="result">England won by 6 wickets</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="Flag" class="icon">
+                <h3 class="tournament-name">World Cup</h3>
+                <p class="format-info">ODI 9 of 48</p>
+                <p class="match-stage">Group A</p>
+                <p class="team-name team-one">Australia</p>
+                <p class="score score-one">260/7</p>
+                <p class="team-name team-two">England</p>
+                <p class="score score-two">261/4</p>
+                <p class="result">England won by 6 wickets</p>
+            </button>
+            <button class="card" onclick="window.location.href='./cricket.html'">
+                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="Flag" class="icon">
+                <h3 class="tournament-name">World Cup</h3>
+                <p class="format-info">ODI 9 of 48</p>
+                <p class="match-stage">Group A</p>
+                <p class="team-name team-one">Australia</p>
+                <p class="score score-one">260/7</p>
+                <p class="team-name team-two">England</p>
+                <p class="score score-two">261/4</p>
+                <p class="result">England won by 6 wickets</p>
+            </button>
+        </div>
+
+        <div class="content-area">
+            <div class="options">
+                <div class="button">
+                    <button id="men" class="active">Men</button>
+                    <button id="women">Women</button>
+                </div>
+
+                <div class="rankcard" id="rankcard-test">
+                    <div class="rankcard-front rank-active">
+                        <b class="rank-heading">Men Test Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">India</p>
+                            <p class="rank-number">02</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">03</p><p class="rank-team">England</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                    <div class="rankcard-back">
+                        <b class="rank-heading">Women Test Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">02</p><p class="rank-team">England</p>
+                            <p class="rank-number">03</p><p class="rank-team">India</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rankcard" id="rankcard-odi">
+                    <div class="rankcard-front rank-active">
+                        <b class="rank-heading">Men ODI Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">India</p>
+                            <p class="rank-number">02</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">03</p><p class="rank-team">England</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                    <div class="rankcard-back">
+                        <b class="rank-heading">Women ODI Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">02</p><p class="rank-team">England</p>
+                            <p class="rank-number">03</p><p class="rank-team">India</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rankcard" id="rankcard-t20">
+                    <div class="rankcard-front rank-active">
+                        <b class="rank-heading">Men T20I Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">India</p>
+                            <p class="rank-number">02</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">03</p><p class="rank-team">England</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                    <div class="rankcard-back">
+                        <b class="rank-heading">Women T20I Team Rankings</b>
+                        <div class="rank-item-container">
+                            <p class="rank-number">01</p><p class="rank-team">Australia</p>
+                            <p class="rank-number">02</p><p class="rank-team">England</p>
+                            <p class="rank-number">03</p><p class="rank-team">India</p>
+                            <p class="rank-number">04</p><p class="rank-team">South Africa</p>
+                            <p class="rank-number">05</p><p class="rank-team">New Zealand</p>
+                            <p class="rank-number">06</p><p class="rank-team">Sri Lanka</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 Cricket Analytics. All rights reserved.
+    </footer>
+
+    <script src="cricketscript.js"></script>
+</body>
+</html>

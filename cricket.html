@@ -1,208 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cricket Analytics</title>
-    <link rel="stylesheet" href="./cricketstyle.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Match Scorecard - India vs Pakistan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-blue: #0077b6;
+      --secondary-blue: #00b4d8;
+      --dark-blue: #023e8a;
+      --light-bg: #f6f9fc;
+      --card-bg: #ffffff;
+      --out-color: #e74c3c;
+      --not-out-color: #27ae60;
+      --font: 'Poppins', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font);
+      background: var(--light-bg);
+      color: var(--dark-blue);
+      line-height: 1.6;
+    }
+
+    header {
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 60px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav a {
+      margin-left: 30px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      color: var(--dark-blue);
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover { color: var(--secondary-blue); }
+
+    .cta-nav {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white !important;
+      padding: 10px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .cta-nav:hover { transform: translateY(-3px); background: var(--dark-blue); }
+
+    .scorecard-container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .match-header {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      padding: 45px 20px;
+      border-radius: 25px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .match-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 8px; }
+    .result-text { font-size: 1.2rem; font-weight: 600; margin-top: 5px; }
+
+    .scores-summary {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .inning-score {
+      flex: 1 1 300px;
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .inning-score:hover { transform: translateY(-5px); }
+
+    .tab-buttons {
+      display: flex;
+      margin-top: 50px;
+      border-radius: 15px 15px 0 0;
+      overflow: hidden;
+      border: 1px solid #e0e6f0;
+    }
+
+    .tab-button {
+      flex: 1;
+      padding: 15px;
+      font-weight: 600;
+      background: #f1f7fd;
+      color: var(--dark-blue);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button.active {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+    }
+
+    .tab-content {
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      margin-bottom: 40px;
+    }
+
+    .score-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .score-table th, .score-table td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .score-table th {
+      background-color: var(--light-bg);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+    }
+
+    .player-info {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .player-profile-icon {
+      width: 35px;
+      height: 35px;
+      min-width: 35px;
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    #p1{
+      background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.0)), url("data:image/jpeg;base64,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");
+      background-size:cover;
+      background-position: right;
+    }
+    #p2{
+      background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.0)), url("https://documents.bcci.tv/resizedimageskirti/107_compress.png");
+      background-size:cover;
+      background-position: right;
+    }
+    #p3{
+      background: linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.0)), url("https://documents.bcci.tv/resizedimageskirti/164_compress.png");
+      background-size:cover;
+      background-position: right;
+    }
+    .player-profile-icon:hover { transform: scale(1.1); }
+
+    .dismissal-info {
+      display: block;
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 2px;
+      width: 100%;
+    }
+
+    /* fixed not out symbol */
+    .not-out-symbol {
+      color: var(--not-out-color);
+      font-weight: 700;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .not-out-symbol::after {
+      content: '*';
+      margin-left: 3px;
+      color: var(--not-out-color);
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    /* Did Not Bat Section */
+    .did-not-bat {
+      margin-top: 25px;
+      background: #f9fcff;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .did-not-bat h4 {
+      margin-bottom: 12px;
+      color: var(--dark-blue);
+      font-weight: 700;
+    }
+
+    .player-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .player-tag {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: var(--dark-blue);
+      color: white;
+      font-size: 0.9rem;
+      border-top: 4px solid var(--secondary-blue);
+    }
+
+    /* Popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .player-popup {
+      background: white;
+      border-radius: 20px;
+      padding: 25px;
+      max-width: 350px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .popup-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      object-fit: cover;
+      border: 4px solid var(--primary-blue);
+    }
+
+    .player-popup h2 { color: var(--dark-blue); font-size: 1.4rem; margin-bottom: 10px; }
+    .player-popup p { font-size: 0.95rem; color: #555; margin: 4px 0; }
+
+    .close-btn {
+      margin-top: 15px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">
-        <img src="https://w0.peakpx.com/wallpaper/285/834/HD-wallpaper-icc-logo-cwc-logo.jpg" alt="logo">
-        <b>Cricket Analytics</b>
-        <div class="nav-menu">
-            <button id="menu-button">☰</button>
-            <div class="dropdown-content" id="analytics-dropdown">
-                <a href="#">Players Comparison & Stats</a>
-                <a href="#">Rankings</a>
-                <a href="#">Tournaments</a>
-            </div>
-        </div>
-    </div>
-    <div class="holder">
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">Asia Cup</p>
-            <p id="format">T20 14 of 20</p>
-            <p id="current">Toss</p>
-            <p id="one">India</p>
-            <p id="two">Pakistan</p>
-            <p id="score1">174/8</p>
-            <p id="score2">180/2</p>
-            <p id="result">Pakistan won by 8 wickets</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">Asia Cup</p>
-            <p id="format">T20 13 of 20</p>
-            <p id="current">Final</p>
-            <p id="one">India</p>
-            <p id="two">Sri Lanka</p>
-            <p id="score1">210/5</p>
-            <p id="score2">198/8</p>
-            <p id="result">India won by 12 runs</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">World Cup</p>
-            <p id="format">ODI 9 of 48</p>
-            <p id="current">Group A</p>
-            <p id="one">Australia</p>
-            <p id="two">England</p>
-            <p id="score1">260/7</p>
-            <p id="score2">261/4</p>
-            <p id="result">England won by 6 wickets</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">World Cup</p>
-            <p id="format">ODI 9 of 48</p>
-            <p id="current">Group A</p>
-            <p id="one">Australia</p>
-            <p id="two">England</p>
-            <p id="score1">260/7</p>
-            <p id="score2">261/4</p>
-            <p id="result">England won by 6 wickets</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">World Cup</p>
-            <p id="format">ODI 9 of 48</p>
-            <p id="current">Group A</p>
-            <p id="one">Australia</p>
-            <p id="two">England</p>
-            <p id="score1">260/7</p>
-            <p id="score2">261/4</p>
-            <p id="result">England won by 6 wickets</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">World Cup</p>
-            <p id="format">ODI 9 of 48</p>
-            <p id="current">Group A</p>
-            <p id="one">Australia</p>
-            <p id="two">England</p>
-            <p id="score1">260/7</p>
-            <p id="score2">261/4</p>
-            <p id="result">England won by 6 wickets</p>
-        </div>
-        <div class="card">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/330px-Flag_of_India.svg.png" alt="flag" id="icon">
-            <p id="tournament">World Cup</p>
-            <p id="format">ODI 9 of 48</p>
-            <p id="current">Group A</p>
-            <p id="one">Australia</p>
-            <p id="two">England</p>
-            <p id="score1">260/7</p>
-            <p id="score2">261/4</p>
-            <p id="result">England won by 6 wickets</p>
-        </div>
 
+  <header>
+    <div class="logo">🏏 SportSense Scoreboard</div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Matches</a>
+      <a href="#">Teams</a>
+      <a href="#" class="cta-nav">Login</a>
+    </nav>
+  </header>
+
+  <div class="scorecard-container">
+    <div class="match-header">
+      <h1>Asia Cup Final: India vs Pakistan</h1>
+      <p class="result-text">India won by 12 runs</p>
+      <p>T20 • Final • Dubai International Cricket Stadium</p>
     </div>
 
-    <div class="options">
-        <div class="button">
-            <button id="men">Men</button>
-            <button id="women">Women</button>
-        </div>
-
-        <!-- TEST RANKINGS CARD -->
-        <div class="rankcard" id="rankcard-test">
-            <div class="rankcard-front">
-                <b id="heading">Men Test Team Rankings</b>
-                <p id="n1">01</p><p id="t1">India</p>
-                <p id="n2">02</p><p id="t2">Australia</p>
-                <p id="n3">03</p><p id="t3">England</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-            <div class="rankcard-back">
-                <b id="heading">Women Test Team Rankings</b>
-                <p id="n1">01</p><p id="t1">Australia</p>
-                <p id="n2">02</p><p id="t2">England</p>
-                <p id="n3">03</p><p id="t3">India</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-        </div>
-
-        <!-- ODI RANKINGS CARD -->
-        <div class="rankcard" id="rankcard-odi">
-            <div class="rankcard-front">
-                <b id="heading">Men ODI Team Rankings</b>
-                <p id="n1">01</p><p id="t1">India</p>
-                <p id="n2">02</p><p id="t2">Australia</p>
-                <p id="n3">03</p><p id="t3">England</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-            <div class="rankcard-back">
-                <b id="heading">Women ODI Team Rankings</b>
-                <p id="n1">01</p><p id="t1">Australia</p>
-                <p id="n2">02</p><p id="t2">England</p>
-                <p id="n3">03</p><p id="t3">India</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-        </div>
-
-        <!-- T20I RANKINGS CARD -->
-        <div class="rankcard" id="rankcard-t20">
-            <div class="rankcard-front">
-                <b id="heading">Men T20I Team Rankings</b>
-                <p id="n1">01</p><p id="t1">India</p>
-                <p id="n2">02</p><p id="t2">Australia</p>
-                <p id="n3">03</p><p id="t3">England</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-            <div class="rankcard-back">
-                <b id="heading">Women T20I Team Rankings</b>
-                <p id="n1">01</p><p id="t1">Australia</p>
-                <p id="n2">02</p><p id="t2">England</p>
-                <p id="n3">03</p><p id="t3">India</p>
-                <p id="n4">04</p><p id="t4">South Africa</p>
-                <p id="n5">05</p><p id="t5">New Zealand</p>
-                <p id="n6">06</p><p id="t6">Sri Lanka</p>
-            </div>
-        </div>
-        </div>
-
-        <div class="news-section">
-            <h2 id="news-heading">Latest Cricket News</h2>
-            <div class="news-item">
-                <p class="news-title">Title of News Article 1</p>
-                <p class="news-summary">A brief summary of the first cricket news article goes here. This could be about a recent match, player performance, or upcoming series.</p>
-                <a href="#" class="news-link">Read More</a>
-            </div>
-            <div class="news-item">
-                <p class="news-title">Title of News Article 2</p>
-                <p class="news-summary">A brief summary of the second cricket news article goes here. Another piece of information regarding tournaments or player injuries.</p>
-                <a href="#" class="news-link">Read More</a>
-            </div>
-            <div class="news-item">
-                <p class="news-title">Title of News Article 3</p>
-                <p class="news-summary">A brief summary of the third cricket news article goes here. Updates on team selections or coaching staff changes.</p>
-                <a href="#" class="news-link">Read More</a>
-            </div>
-            <div class="news-item">
-                <p class="news-title">Title of News Article 3</p>
-                <p class="news-summary">A brief summary of the third cricket news article goes here. Updates on team selections or coaching staff changes.</p>
-                <a href="#" class="news-link">Read More</a>
-            </div>
-            <div class="news-item">
-                <p class="news-title">Title of News Article 3</p>
-                <p class="news-summary">A brief summary of the third cricket news article goes here. Updates on team selections or coaching staff changes.</p>
-                <a href="#" class="news-link">Read More</a>
-            </div>
-        </div>
+    <div class="scores-summary">
+      <div class="inning-score">
+        <h3>India: 210/5 (20.0 Ov)</h3>
+        <p>Target: 199</p>
+      </div>
+      <div class="inning-score">
+        <h3>Pakistan: 198/8 (20.0 Ov)</h3>
+        <p>Run Rate: 9.90</p>
+      </div>
     </div>
 
-    <script src="cricketscript.js"></script>
+    <div class="tab-buttons">
+      <button class="tab-button active" data-tab="batting">Batting Scorecard</button>
+      <button class="tab-button" data-tab="bowling">Bowling Scorecard</button>
+    </div>
+
+    <div id="batting" class="tab-content">
+      <h2>India Innings</h2>
+      <table class="score-table">
+        <thead>
+          <tr><th>Batsman</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="player-info">
+              <div class="player-profile-icon" data-player="Shubman Gill" id="p1"></div>Shubman Gill
+              <span class="dismissal-info out-detail">c Babar Azam b Shaheen Afridi</span>
+            </td>
+            <td>45</td><td>30</td><td>5</td><td>1</td><td>150.00</td>
+          </tr>
+          <tr>
+            <td class="player-info">
+              <div class="player-profile-icon" data-player="Rohit Sharma" id="p2"></div>Rohit Sharma
+              <span class="dismissal-info out-detail">b Naseem Shah</span>
+            </td>
+            <td>12</td><td>8</td><td>2</td><td>0</td><td>150.00</td>
+          </tr>
+          <tr>
+            <td class="player-info">
+              <div class="player-profile-icon" data-player="Virat Kohli" id="p3"></div>Virat Kohli
+              <span class="dismissal-info out-detail">not out</span>
+            </td>
+            <td><span class="not-out-symbol">78</span></td><td>45</td><td>4</td><td>5</td><td>173.33</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Did Not Bat Section -->
+      <div class="did-not-bat">
+        <h4>Did Not Bat</h4>
+        <div class="player-tags">
+          <div class="player-tag">Hardik Pandya</div>
+          <div class="player-tag">Ravindra Jadeja</div>
+          <div class="player-tag">Kuldeep Yadav</div>
+          <div class="player-tag">Jasprit Bumrah</div>
+          <div class="player-tag">Mohammed Siraj</div>
+          <div class="player-tag">Arshdeep Singh</div>
+          <div class="player-tag">Suryakumar Yadav</div>
+          <div class="player-tag">Rishabh Pant</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="overlay" id="overlay">
+    <div class="player-popup" id="popup">
+      <img src="" alt="Player Photo" class="popup-img" id="playerImg">
+      <h2 id="playerName"></h2>
+      <p id="playerDOB"></p>
+      <p id="playerStats"></p>
+      <p id="playerWkts"></p>
+      <button class="close-btn" id="closePopup">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 SportSense Analytics. All rights reserved.
+  </footer>
+
+  <script>
+    const playerData = {
+      "Virat Kohli": {
+        img: "https://static.toiimg.com/thumb/msid-114878595,width-400,resizemode-4/114878595.jpg",
+        dob: "Born: November 5, 1988",
+        stats: "International Runs: 25,000+",
+        wkts: "Wickets Taken: 4"
+      },
+      "Rohit Sharma": {
+        img: "https://static.toiimg.com/photo/107601277.cms",
+        dob: "Born: April 30, 1987",
+        stats: "International Runs: 18,000+",
+        wkts: "Wickets Taken: 8"
+      },
+      "Shubman Gill": {
+        img: "https://static.toiimg.com/thumb/msid-114657383,width-400,resizemode-4/114657383.jpg",
+        dob: "Born: September 8, 1999",
+        stats: "International Runs: 4000+",
+        wkts: "Wickets Taken: 0"
+      }
+    };
+
+    const overlay = document.getElementById("overlay");
+    const popup = document.getElementById("popup");
+    const playerImg = document.getElementById("playerImg");
+    const playerName = document.getElementById("playerName");
+    const playerDOB = document.getElementById("playerDOB");
+    const playerStats = document.getElementById("playerStats");
+    const playerWkts = document.getElementById("playerWkts");
+    const closePopup = document.getElementById("closePopup");
+
+    document.querySelectorAll(".player-profile-icon").forEach(icon => {
+      icon.addEventListener("click", () => {
+        const player = icon.dataset.player;
+        const data = playerData[player];
+        playerImg.src = data.img;
+        playerName.textContent = player;
+        playerDOB.textContent = data.dob;
+        playerStats.textContent = data.stats;
+        playerWkts.textContent = data.wkts;
+        overlay.style.display = "flex";
+      });
+    });
+
+    closePopup.addEventListener("click", () => overlay.style.display = "none");
+    overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.style.display = "none"; });
+  </script>
 </body>
 </html>
