@@ -311,6 +311,21 @@
       from { transform: scale(0.9); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
     }
+    .chart-section {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin: 40px auto;
+  width: 80%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.chart-section h2 {
+  text-align: center;
+  color: var(--dark-blue);
+  margin-bottom: 20px;
+}
+
   </style>
 </head>
 <body>
@@ -407,27 +422,76 @@
       <button class="close-btn" id="closePopup">Close</button>
     </div>
   </div>
+  <div class="chart-section">
+    <h2>Runs per Over</h2>
+    <canvas id="runsChart"></canvas>
+  </div>
 
   <footer>
     &copy; 2025 SportSense Analytics. All rights reserved.
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('runsChart').getContext('2d');
+
+const runsChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], // Overs
+    datasets: [{
+      label: 'Runs per Over',
+      data: [4, 6, 3, 8, 12, 9, 15, 10, 18, 7], // Sample data
+      borderColor: '#007bff',
+      backgroundColor: 'rgba(0, 123, 255, 0.1)',
+      tension: 0.4,
+      pointRadius: 5,
+      pointBackgroundColor: '#007bff',
+      fill: true
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Runs' }
+      },
+      x: {
+        title: { display: true, text: 'Over Number' }
+      }
+    },
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: '#333',
+          font: { size: 14, weight: 'bold' }
+        }
+      },
+      title: {
+        display: false
+      }
+    }
+  }
+});
+</script>
 
   <script>
     const playerData = {
       "Virat Kohli": {
-        img: "https://static.toiimg.com/thumb/msid-114878595,width-400,resizemode-4/114878595.jpg",
+        img: "https://documents.bcci.tv/resizedimageskirti/164_compress.png",
         dob: "Born: November 5, 1988",
         stats: "International Runs: 25,000+",
         wkts: "Wickets Taken: 4"
       },
       "Rohit Sharma": {
-        img: "https://static.toiimg.com/photo/107601277.cms",
+        img: "https://documents.bcci.tv/resizedimageskirti/107_compress.png",
         dob: "Born: April 30, 1987",
         stats: "International Runs: 18,000+",
         wkts: "Wickets Taken: 8"
       },
       "Shubman Gill": {
-        img: "https://static.toiimg.com/thumb/msid-114657383,width-400,resizemode-4/114657383.jpg",
+        img:"data:image/jpeg;base64,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",
         dob: "Born: September 8, 1999",
         stats: "International Runs: 4000+",
         wkts: "Wickets Taken: 0"
